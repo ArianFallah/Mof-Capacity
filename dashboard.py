@@ -62,36 +62,36 @@ st.dataframe(mandeh_g)
 card = df_refah[~df_refah['cardpermonth_1401'].isna()] 
 card['card_mt'] = card['cardpermonth_1401'] / (10 * 1000 * 1000) 
 card_g = card.groupby('city').agg(card_count=('id', 'count'), 
-                                  card_median_mt=('card_mt', 'median'), 
-                                  card_mean_mt=('card_mt', 'mean'), 
-                                  card_p90_mt=('card_mt', lambda x: x.quantile(0.90)),
-                                  card_p99_mt=('card_mt', lambda x: x.quantile(0.99))
+                                  median_mt=('card_mt', 'median'), 
+                                  mean_mt=('card_mt', 'mean'), 
+                                  p90_mt=('card_mt', lambda x: x.quantile(0.90)),
+                                  p99_mt=('card_mt', lambda x: x.quantile(0.99))
                                   )
 
 card_g = pd.merge(df_refah_g[['city', 'all_count']], card_g, on='city', how='inner').sort_values('card_count', ascending=False)
-columns_to_format_3 = ['card_median_mt', 'card_mean_mt', 'card_p90_mt', 'card_p99_mt']
+columns_to_format_3 = ['median_mt', 'mean_mt', 'p90_mt', 'p99_mt']
 card_g[columns_to_format_3] = card_g[columns_to_format_3].applymap(format_number)
 
 # Display Card Data
-st.subheader("Card Data")
+st.subheader("Card per month Data")
 st.dataframe(card_g)
 
 # Building car transactions statistics
 car = df_refah[df_refah['carsprice'] > 0] 
 car['car_mt'] = car['carsprice'] / (10 * 1000 * 1000)
 car_g = car.groupby('city').agg(has_car_count=('id', 'count'), 
-                                car_price_median_mt=('car_mt', 'median'), 
-                                car_price_mean_mt=('car_mt', 'mean'), 
-                                car_price_p90_mt=('car_mt', lambda x: x.quantile(0.90)),
-                                car_price_p99_mt=('car_mt', lambda x: x.quantile(0.99))
+                                median_mt=('car_mt', 'median'), 
+                                mean_mt=('car_mt', 'mean'), 
+                                p90_mt=('car_mt', lambda x: x.quantile(0.90)),
+                                p99_mt=('car_mt', lambda x: x.quantile(0.99))
                                 ).reset_index()
 
 car_g = pd.merge(df_refah_g[['city', 'all_count']], car_g, on='city', how='inner').sort_values('has_car_count', ascending=False)
-columns_to_format_4 = ['car_price_median_mt', 'car_price_mean_mt', 'car_price_p90_mt', 'car_price_p99_mt']
+columns_to_format_4 = ['median_mt', 'mean_mt', 'p90_mt', 'p99_mt']
 car_g[columns_to_format_4] = car_g[columns_to_format_4].applymap(format_number)
 
 # Display Car Data
-st.subheader("Car Data")
+st.subheader("Car Price Data")
 st.dataframe(car_g)
 
 # Building mofid
