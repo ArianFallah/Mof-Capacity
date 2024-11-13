@@ -104,7 +104,7 @@ bourse_m_g = bourse_m.groupby('city').agg(online_count=('customerkey', 'count'),
                                       p99_mt=('bourse_mt', lambda x: x.quantile(0.99))
                                      ).reset_index()
 df_g = df.groupby('city').agg(all_count=('customerkey', 'count')).reset_index()                                 
-bourse_m_g = pd.merge(df_g[['city', 'all_count']], bourse_m_g, on='city', how='inner').sort_values('mofid_count', ascending=False)
+bourse_m_g = pd.merge(df_g[['city', 'all_count']], bourse_m_g, on='city', how='inner').sort_values('online_count', ascending=False)
 columns_to_format_5 = ['median_mt', 'mean_mt', 'p90_mt', 'p99_mt']
 bourse_m_g[columns_to_format_5] = bourse_m_g[columns_to_format_5].applymap(format_number)
 
@@ -123,7 +123,7 @@ bourse_m_mf_g = bourse_m_mf.groupby('city').agg(mf_count=('customerkey', 'count'
                                       p99_mt=('bourse_mt', lambda x: x.quantile(0.99))
                                      ).reset_index()
 df_g = df.groupby('city').agg(all_count=('customerkey', 'count')).reset_index()                                 
-bourse_m_mf_g = pd.merge(df_g[['city', 'all_count']], bourse_m_mf_g, on='city', how='inner').sort_values('mofid_count', ascending=False)
+bourse_m_mf_g = pd.merge(df_g[['city', 'all_count']], bourse_m_mf_g, on='city', how='inner').sort_values('mf_count', ascending=False)
 columns_to_format6 = ['median_mt', 'mean_mt', 'p90_mt', 'p99_mt']
 bourse_m_mf_g[columns_to_format6] = bourse_m_mf_g[columns_to_format6].applymap(format_number)
 
