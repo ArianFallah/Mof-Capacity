@@ -23,19 +23,20 @@ def format_number(x):
 bourse = df_refah[df_refah['bourse'] > 10 * 1000 * 1000] 
 bourse['bourse_mt'] = bourse['bourse'] / (10 * 1000 * 1000) 
 bourse_g = bourse.groupby('city').agg(bourse_count=('id', 'count'), 
-                                      bourse_median_mt=('bourse_mt', 'median'), 
-                                      bourse_mean_mt=('bourse_mt', 'mean'), 
-                                      bourse_p90_mt=('bourse_mt', lambda x: x.quantile(0.90)),
-                                      bourse_p99_mt=('bourse_mt', lambda x: x.quantile(0.99))
+                                      median_mt=('bourse_mt', 'median'), 
+                                      mean_mt=('bourse_mt', 'mean'), 
+                                      p90_mt=('bourse_mt', lambda x: x.quantile(0.90)),
+                                      p99_mt=('bourse_mt', lambda x: x.quantile(0.99))
                                      ).reset_index()
 
 # Merging with reference table and formatting
 df_refah_g = df_refah.groupby('city').agg(all_count=('id', 'count')).reset_index()                                 
 bourse_g = pd.merge(df_refah_g[['city', 'all_count']], bourse_g, on='city', how='inner').sort_values('bourse_count', ascending=False)
-columns_to_format = ['bourse_median_mt', 'bourse_mean_mt', 'bourse_p90_mt', 'bourse_p99_mt']
+columns_to_format = ['median_mt', 'mean_mt', 'p90_mt', 'p99_mt']
 bourse_g[columns_to_format] = bourse_g[columns_to_format].applymap(format_number)
 
 # Display Bourse data in the app
+st.header("Data from Refah")
 st.subheader("Bourse Data")
 st.dataframe(bourse_g)
 
@@ -43,14 +44,14 @@ st.dataframe(bourse_g)
 mandeh = df_refah[~df_refah['mandeh_1400'].isna()] 
 mandeh['mandeh_mt'] = mandeh['mandeh_1400'] / (10 * 1000 * 1000) 
 mandeh_g = mandeh.groupby('city').agg(mandeh_count=('id', 'count'), 
-                                      mandeh_median_mt=('mandeh_mt', 'median'), 
-                                      mandeh_mean_mt=('mandeh_mt', 'mean'), 
-                                      mandeh_p90_mt=('mandeh_mt', lambda x: x.quantile(0.90)),
-                                      mandeh_p99_mt=('mandeh_mt', lambda x: x.quantile(0.99))
+                                      median_mt=('mandeh_mt', 'median'), 
+                                      mean_mt=('mandeh_mt', 'mean'), 
+                                      p90_mt=('mandeh_mt', lambda x: x.quantile(0.90)),
+                                      p99_mt=('mandeh_mt', lambda x: x.quantile(0.99))
                                      )
 
 mandeh_g = pd.merge(df_refah_g[['city', 'all_count']], mandeh_g, on='city', how='inner').sort_values('mandeh_count', ascending=False)
-columns_to_format_2 = ['mandeh_median_mt', 'mandeh_mean_mt', 'mandeh_p90_mt', 'mandeh_p99_mt']
+columns_to_format_2 = ['median_mt', 'mean_mt', 'p90_mt', 'p99_mt']
 mandeh_g[columns_to_format_2] = mandeh_g[columns_to_format_2].applymap(format_number)
 
 # Display Mandeh data
@@ -108,7 +109,8 @@ columns_to_format_5 = ['mofid_median_mt', 'mofid_mean_mt', 'mofid_p90_mt', 'mofi
 bourse_m_g[columns_to_format_5] = bourse_m_g[columns_to_format_5].applymap(format_number)
 
 # Display mofid Data
-st.subheader("Mofid Online Section")
+st.header("Data from Mofid")
+st.subheader("Online Section")
 st.dataframe(bourse_m_g)
 
 # Building mofid
@@ -126,7 +128,7 @@ columns_to_format6 = ['mofid_median_mt', 'mofid_mean_mt', 'mofid_p90_mt', 'mofid
 bourse_m_mf_g[columns_to_format6] = bourse_m_mf_g[columns_to_format6].applymap(format_number)
 
 # Display mofid Data
-st.subheader("Mofid MF Section")
+st.subheader("MF Section")
 st.dataframe(bourse_m_mf_g)
 
 st.subheader("AUM Histogram 1")
