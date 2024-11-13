@@ -97,15 +97,15 @@ st.dataframe(car_g)
 # Building mofid
 bourse_m = df[df['online_section'] > 10 * 1000 * 1000] # 1 Million Tomans in mandeh
 bourse_m['bourse_mt'] = bourse_m['online_section'] / (10 * 1000 * 1000) # in Million Tomans
-bourse_m_g = bourse_m.groupby('city').agg(mofid_count=('customerkey', 'count'), 
-                                      mofid_median_mt=('bourse_mt', 'median'), 
-                                      mofid_mean_mt=('bourse_mt', 'mean'), 
-                                      mofid_p90_mt=('bourse_mt', lambda x: x.quantile(0.90)),
-                                      mofid_p99_mt=('bourse_mt', lambda x: x.quantile(0.99))
+bourse_m_g = bourse_m.groupby('city').agg(online_count=('customerkey', 'count'), 
+                                      median_mt=('bourse_mt', 'median'), 
+                                      mean_mt=('bourse_mt', 'mean'), 
+                                      p90_mt=('bourse_mt', lambda x: x.quantile(0.90)),
+                                      p99_mt=('bourse_mt', lambda x: x.quantile(0.99))
                                      ).reset_index()
 df_g = df.groupby('city').agg(all_count=('customerkey', 'count')).reset_index()                                 
 bourse_m_g = pd.merge(df_g[['city', 'all_count']], bourse_m_g, on='city', how='inner').sort_values('mofid_count', ascending=False)
-columns_to_format_5 = ['mofid_median_mt', 'mofid_mean_mt', 'mofid_p90_mt', 'mofid_p99_mt']
+columns_to_format_5 = ['median_mt', 'mean_mt', 'p90_mt', 'p99_mt']
 bourse_m_g[columns_to_format_5] = bourse_m_g[columns_to_format_5].applymap(format_number)
 
 # Display mofid Data
@@ -116,15 +116,15 @@ st.dataframe(bourse_m_g)
 # Building mofid
 bourse_m_mf = df[df['MF_section'] > 10 * 1000 * 1000] # 1 Million Tomans in mandeh
 bourse_m_mf['bourse_mt'] = bourse_m_mf['MF_section'] / (10 * 1000 * 1000) # in Million Tomans
-bourse_m_mf_g = bourse_m_mf.groupby('city').agg(mofid_count=('customerkey', 'count'), 
-                                      mofid_median_mt=('bourse_mt', 'median'), 
-                                      mofid_mean_mt=('bourse_mt', 'mean'), 
-                                      mofid_p90_mt=('bourse_mt', lambda x: x.quantile(0.90)),
-                                      mofid_p99_mt=('bourse_mt', lambda x: x.quantile(0.99))
+bourse_m_mf_g = bourse_m_mf.groupby('city').agg(mf_count=('customerkey', 'count'), 
+                                      median_mt=('bourse_mt', 'median'), 
+                                      mean_mt=('bourse_mt', 'mean'), 
+                                      p90_mt=('bourse_mt', lambda x: x.quantile(0.90)),
+                                      p99_mt=('bourse_mt', lambda x: x.quantile(0.99))
                                      ).reset_index()
 df_g = df.groupby('city').agg(all_count=('customerkey', 'count')).reset_index()                                 
 bourse_m_mf_g = pd.merge(df_g[['city', 'all_count']], bourse_m_mf_g, on='city', how='inner').sort_values('mofid_count', ascending=False)
-columns_to_format6 = ['mofid_median_mt', 'mofid_mean_mt', 'mofid_p90_mt', 'mofid_p99_mt']
+columns_to_format6 = ['median_mt', 'mean_mt', 'p90_mt', 'p99_mt']
 bourse_m_mf_g[columns_to_format6] = bourse_m_mf_g[columns_to_format6].applymap(format_number)
 
 # Display mofid Data
